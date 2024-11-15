@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Configuración de metadatos -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino La Fortuna - Despliegue</title>
+    
+    <!-- Carga de estilos de Reveal.js para la presentación -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    
+    <!-- Estilos personalizados -->
+    <style>
+        /* Variables de color y estilo */
+        :root {
+            --primary-color: #007bff;
+            --bg-dark: #141414;
+            --transition-standard: all 0.3s ease;
+            --box-shadow-blue: 0 0 15px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Estilo general del fondo y texto */
+        body {
+            background-color: var(--bg-dark);
+        }
+        .reveal {
+            color: #ffffff;
+        }
+
+        /* Estilo de encabezados */
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: var(--primary-color);
+        }
+        .blue-text {
+            color: var(--primary-color) !important;
+        }
+
+        /* Configuración de una cuadrícula para tarjetas tecnológicas */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px;
+        }
+
+        /* Estilos de las tarjetas tecnológicas */
+        .tech-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition-standard);
+        }
+
+        /* Efecto hover para las tarjetas */
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-blue);
+        }
+
+        /* Tarjetas activas */
+        .tech-card.active {
+            background: rgba(0, 123, 255, 0.1);
+            box-shadow: var(--box-shadow-blue);
+        }
+
+        /* Encabezado de las tarjetas */
+        .tech-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Icono de expansión en las tarjetas */
+        .tech-header:after {
+            content: '+';
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+        .tech-card.active .tech-header:after {
+            transform: rotate(45deg);
+        }
+
+        /* Listas de características y funcionalidades */
+        .feature-list, .functionality-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        /* Efectos de lista de características */
+        .feature-list {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            margin: 0;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+        }
+        .feature-list.active {
+            max-height: 200px;
+            margin-top: 15px;
+            opacity: 1;
+        }
+
+        /* Estilo de las listas de funcionalidades */
+        .functionality-list {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .functionality-list li {
+            padding: 15px;
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+            transition: var(--transition-standard);
+        }
+
+        /* Efecto hover en funcionalidades */
+        .functionality-list li:hover {
+            transform: translateX(10px);
+            background: rgba(0, 123, 255, 0.15);
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+        }
+        .functionality-list strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        /* Animación para el logo */
+        .logo-container {
+            perspective: 1000px;
+            padding: 20px;
+        }
+        @keyframes bounceInAndRotate {
+            0% {
+                transform: scale(0.5) rotateY(180deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.1) rotateY(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+        .logo-casino-enhanced {
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            animation: bounceInAndRotate 10s ease-in-out;
+            box-shadow: var(--box-shadow-blue);
+            border-radius: 50%;
+            transition: var(--transition-standard);
+        }
+
+        /* Efecto hover en el logo */
+        .logo-casino-enhanced:hover {
+            transform: scale(1.05) rotateY(10deg);
+            box-shadow: 0 0 40px rgba(0, 123, 255, 0.5);
+        }
+        /* Aseguramos que la lista esté siempre visible */
+        .feature-list.always-active {
+            max-height: none;
+            opacity: 1;
+            margin-top: 15px;
+        }
+        /* Animación personalizada para el logo SENA */
+        @keyframes glowPulse {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(0, 123, 255, 0.6));
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                filter: drop-shadow(0 0 1px rgba(0, 123, 255, 0.8));
+                transform: scale(1.1) rotate(1deg);
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(0, 123, 255, 0.6));
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .logo-sena {
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            animation: glowPulse 3s ease-in-out infinite;
+            transition: var(--transition-standard);
+            filter: brightness(1.1) contrast(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Logo SENA -->
+            <section style="text-align: center;">
+                <div class="logo-container">
+                    <img 
+                        src="https://i.ibb.co/7Qf9ptP/Logo-SENA.png" 
+                        alt="Logo SENA" 
+                        class="logo-sena"
+                    />
+                </div>
+            </section>
+
+            <!-- Información del proyecto -->
+            <section style="position: relative; text-align: center;">
+                <h3 class="blue-text">Despliegue en Producción</h3>
+                <h4>Casino La Fortuna</h4>
+                <p>Presentado por:</p>
+                <ul>
+                    <li>Penélope Noreña Ramos</li>
+                    <li>Hernan Darío Pérez Higuita</li>
+                    <li>William Pérez Muñoz</li>
+                </ul>
+                <p>Servicio Nacional de Aprendizaje (SENA)</p>
+                <p>Centro de Gestión de Mercados, Logística y TI</p>
+                <p>Tecnología en Análisis y Desarrollo de Software</p>
+                <p>Ficha: 2758315 - Octubre 2024</p>
+            </section>
+
+            <section>
+                <h3>Introducción</h3>
+                <p>Este proyecto presenta el despliegue en producción del módulo de gestión de clientes para Casino La Fortuna.</p>
+                <p>Se incluyen las funcionalidades de registro, autenticación y administración de perfil, permitiendo una experiencia de usuario segura y eficiente.</p>
+            </section>
+
+            <!-- Logo de Casino La Fortuna -->
+            <section style="text-align: center;">
+                <div class="logo-container">
+                    <img 
+                        src="https://i.ibb.co/mH4bsxb/logo.png" 
+                        alt="Logo Casino la Fortuna" 
+                        class="logo-casino-enhanced"
+                    />
+                </div>
+            </section>
+
+            <!-- Descripción del Proyecto -->
+            <section>
+                <h3 class="blue-text">Descripción del Proyecto</h3>
+                <p>Sistema de gestión integral que permite:</p>
+                <ul>
+                    <li>Administración financiera y contable</li>
+                    <li>Gestión de clientes y operadores</li>
+                    <li>Control de máquinas tragamonedas</li>
+                    <li>Servicios de entretenimiento en línea</li>
+                </ul>
+            </section>
+            <!-- Stack Tecnológico -->
+            <section>
+                <h3 class="blue-text">Stack Tecnológico</h3>
+                <div class="tech-grid">
+                    <div class="tech-card" onclick="toggleContent(this, 'frontend-content')">
+                        <div class="tech-header">
+                            <h5>Frontend</h5>
+                        </div>
+                        <ul id="frontend-content" class="feature-list">
+                            <li>React</li>
+                            <li>Bootstrap</li>
+                            <li>JWT</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card" onclick="toggleContent(this, 'backend-content')">
+                        <div class="tech-header">
+                            <h5>Backend</h5>
+                        </div>
+                        <ul id="backend-content" class="feature-list">
+                            <li>Node.js</li>
+                            <li>Express</li>
+                            <li>reCAPTCHA</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card" onclick="toggleContent(this, 'database-content')">
+                        <div class="tech-header">
+                            <h5>Base de Datos</h5>
+                        </div>
+                        <ul id="database-content" class="feature-list">
+                            <li><a href="javascript:void(0)" onclick="openCustomModal('supabase')">Supabase</a></li>
+                            <li>Tiempo real</li>
+                            <li>Auth integrada</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card" onclick="toggleContent(this, 'deployment-content')">
+                        <div class="tech-header">
+                            <h5>Despliegue</h5>
+                        </div>
+                        <ul id="deployment-content" class="feature-list">
+                            <li><a href="javascript:void(0)" onclick="openCustomModal('vercel')">Vercel (Frontend)</a></li>
+                            <li><a href="javascript:void(0)" onclick="openCustomModal('render')">Render (Backend)</a></li>
+                            <li>CI/CD</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Modal para mostrar imágenes con estilos específicos -->
+                <div id="customImageModal" onclick="closeCustomModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+                    <div onclick="event.stopPropagation()" style="position: relative; max-width: 90%; max-height: 90%;">
+                        <img id="customModalImage" src="" alt="Imagen de despliegue" style="width: 100%; height: auto; max-height: 80vh; display: block; margin: 0 auto; border-radius: 10px;">
+                        <button onclick="closeCustomModal()" style="position: absolute; top: -40px; right: 0; background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- Diapositiva introductoria de requisitos funcionales -->
+            <section>
+                <h3 class="blue-text">Requisitos Funcionales</h3>
+                <p>Para un funcionamiento eficaz del sistema de Casino La Fortuna, se definieron estos requisitos funcionales:</p>
+                <ul>
+                    <li>Gestión de Clientes</li>
+                    <li>Registro de Transacciones</li>
+                    <li>Generación de Informes Financieros</li>
+                    <li>Gestión de Gastos y Pagos</li>
+                    <li>Control de Inventario</li>
+                </ul>
+            </section>
+            <!-- Diapositiva de Gestión de Clientes -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Gestión de Clientes</strong>
+                        <br>
+                        <br>
+                        <em>Nuestro sistema permite un manejo detallado de la información de los clientes del casino, incluyendo registro y seguimiento.</em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Registro de Transacciones -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Registro de Transacciones</strong>
+                        <br>
+                        <br>
+                        <em>
+                        Este módulo se encarga de registrar todas las transacciones financieras realizadas en el casino. 
+                        Cada transacción incluye detalles como el tipo de operación, el monto y la fecha.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Generación de Informes Financieros -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Generación de Informes Financieros</strong>
+                        <br>
+                        <br>
+                        <em>
+                        Nuestro sistema facilita la creación de informes detallados sobre los ingresos, gastos, 
+                        ganancias y pérdidas del casino.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Gestión de Gastos y Pagos -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Gestión de Gastos y Pagos</strong>
+                        <br>
+                        <br>
+                        <em>
+                        Este módulo permite registrar y manejar los gastos operativos, así como los pagos a proveedores.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Control de Inventario -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Control de Inventario</strong>
+                        <br>
+                        <br>
+                        <em>
+                        Nuestro sistema incluye un módulo de control de inventario para gestionar los productos y suministros del casino.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Diapositiva introductoria de requisitos no funcionales -->
+            <section>
+                <h3 class="blue-text">Requisitos No Funcionales</h3>
+                <p>Para asegurar calidad y rendimiento esenciales, el sistema debe cumplir estos requisitos no funcionales:</p>
+                <ul>
+                    <li>Usabilidad</li>
+                    <li>Rendimiento</li>
+                    <li>Escalabilidad</li>
+                    <li>Seguridad</li>
+                    <li>Portabilidad</li>
+                </ul>
+            </section>
+            <!-- Usabilidad -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Usabilidad</strong>
+                        <br>
+                        <br>
+                        <em>
+                        El sistema debe ser fácil de usar y comprender para los usuarios finales, 
+                        con una interfaz intuitiva y amigable.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Rendimiento -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Rendimiento</strong>
+                        <br>
+                        <br>
+                        <em>
+                        El sistema debe ser rápido y eficiente, con tiempos de respuesta rápidos y 
+                        capacidad para manejar múltiples transacciones simultáneamente.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Escalabilidad -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Escalabilidad</strong>
+                        <br>
+                        <br>
+                        <em>
+                        El sistema debe ser capaz de crecer y adaptarse a medida que aumenta el número de usuarios y transacciones.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Seguridad -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Seguridad</strong>
+                        <br>
+                        <br>
+                        <em>
+                        La seguridad de los datos y la privacidad de los usuarios son fundamentales, 
+                        por lo que el sistema debe contar con medidas robustas de protección.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Portabilidad -->
+            <section>
+                <ul class="functionality">
+                    <li>
+                        <strong>Portabilidad</strong>
+                        <br>
+                        <br>
+                        <em>
+                        El sistema debe ser compatible con diferentes dispositivos y plataformas, 
+                        permitiendo a los usuarios acceder desde cualquier lugar y en cualquier momento.
+                        </em>
+                    </li>
+                </ul>
+            </section>
+            <!-- Funcionalidades del Módulo -->
+            <section>
+                <h3>Funcionalidades del Módulo</h3>
+                <ul>
+                    <li>Registro de clientes con validación de datos.</li>
+                    <li>Autenticación segura utilizando JWT.</li>
+                    <li>Administración de perfil de usuario.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3 class="blue-text">Demostración de Despliegue y Funcionalidades</h3>
+                <p>La aplicación está alojada en Vercel y puede accederse en el siguiente enlace:</p>
+                <p>
+                    <a href="https://casino-la-fortuna.vercel.app/" target="_blank" style="color: #007bff; font-weight: bold;">
+                        https://casino-la-fortuna.vercel.app/
+                    </a>
+                </p>
+            </section>
+
+            <section>
+                <div style="margin-top: 20px; text-align: center;">
+                    <h4 class="blue-text">Interfaz en vivo</h4>
+                    
+                    <iframe 
+                        id="live-iframe"
+                        src="https://casino-la-fortuna.vercel.app/" 
+                        style="width: 100%; height: 500px; border: 2px solid #007bff; border-radius: 8px;"
+                        loading="lazy">
+                    </iframe>
+                    
+                    <button onclick="expandIframe()" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                        Ver en pantalla completa
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Sección de características clave -->
+            <section>
+                <div style="margin-top: 40px;">
+                    <h3>Principales Funcionalidades</h3>
+                    <ul class="feature-list always-active">
+                        <li><strong>Registro de Usuarios:</strong> Permite a nuevos clientes registrarse de manera segura.</li>
+                        <li><strong>Autenticación:</strong> Inicio de sesión mediante JWT para proteger las cuentas de usuario.</li>
+                        <li><strong>Gestión de Perfil:</strong> Los usuarios pueden actualizar su información personal.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Agradecimientos -->
+            <section>
+                <h3>Agradecimientos</h3>
+                <p>
+                    Agradecemos al  
+                    <span style="color: #007bff; font-weight: bold;">Servicio Nacional de Aprendizaje (SENA)</span>
+                    y al Centro de Gestión de Mercados, Logística y TI por el apoyo brindado en este proyecto.
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts de Reveal.js y funcionalidades -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        // Inicialización de Reveal.js
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            transition: 'fade', // transición suave y profesional
+            transitionSpeed: 'default', // velocidad media para que sea fluida pero sin apresurarse
+            backgroundTransition: 'fade', // coherente con la transición principal
+            controls: true,
+            progress: true
+        });
+
+        // Variables para control de tarjetas
+        let currentCard = null;
+        let currentContent = null;
+
+        // Función para alternar el contenido de las tarjetas
+        function toggleContent(card, contentId) {
+            const content = document.getElementById(contentId);
+            
+            // Si hay una tarjeta abierta y no es la actual, ciérrala
+            if (currentCard && currentCard !== card) {
+                currentCard.classList.remove('active');
+                currentContent.classList.remove('active');
+            }
+
+            // Alterna el estado de la tarjeta actual
+            card.classList.toggle('active');
+            content.classList.toggle('active');
+
+            // Actualiza las referencias
+            if (card.classList.contains('active')) {
+                currentCard = card;
+                currentContent = content;
+            } else {
+                currentCard = null;
+                currentContent = null;
+            }
+        }
+
+        // Función para expandir el iframe a pantalla completa
+        function expandIframe() {
+            const iframe = document.getElementById('live-iframe');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { // Firefox
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { // IE/Edge
+                iframe.msRequestFullscreen();
+            }
+        }
+    </script>
+    <!-- Script para abrir el modal y cargar imágenes -->
+    <script>
+        function openCustomModal(imageType) {
+            const modal = document.getElementById('customImageModal');
+            const modalImage = document.getElementById('customModalImage');
+    
+            // Ruta de la imagen según el enlace seleccionado
+            switch(imageType) {
+                case 'supabase':
+                    modalImage.src = 'https://i.ibb.co/KKM4Qpv/Supabase.png';
+                    break;
+                case 'vercel':
+                    modalImage.src = 'https://i.ibb.co/mTTqPSj/Vercel.png';
+                    break;
+                case 'render':
+                    modalImage.src = 'https://i.ibb.co/3k6x44n/Render.png';
+                    break;
+            }
+    
+            // Muestra el modal
+            modal.style.display = 'flex';
+        }
+    
+        function closeCustomModal() {
+            // Oculta el modal
+            const modal = document.getElementById('customImageModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
